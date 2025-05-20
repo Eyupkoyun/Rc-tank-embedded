@@ -1,0 +1,287 @@
+/* to do listim
+basic sol palet ve sag palet ileri geri=tamam
+kule sag sol=pwm mantigini ogrenirsem tamam, ayrica kule ve namlu pwm fonklari hangi açilarda çalisacak ben d padde basýlý tuttukca 1++ derece seklind egi,debilecek mi yoksa 15-30-45 gibi derecelerde mi ccalisacak?? 
+namlu yukari asagi
+laser ac kapa=henuz eklenmedi ama d7 ye takilacak simdilik led takabilirim
+isik ac kapa=simdilik led takicam aldigimda fener takarim,
+ses cal=dfplayer henüz alinmadi alindiginda uyari sesleri ve istenirse muzik calinabilecek
+kaliteli ivme kontrol=mpcv6050 alincak henuz yapilmadi
+labirent{ //genel olarak ana hatlariyla boyle olucak sadece epproma nasil veri kaydedip otonom geri gelme yapilcak henuz bilmiyorum
+   sag kontrol
+   sol kontrol
+   geri don
+   eski konum=eski konuma mi gelmeli yoksa direkt yeni yola mi girmeli emin degilim
+   islemleri kaydedip tersini yaptirma=
+   mz80 verisini sürekli ve dogru sekide mi okuyorum=
+}
+yapilan fonklar uygun mu=?
+fonklar parametreli olmali mi=?
+kullandigim mz80 hc06 l298n gibi bilesenler direkt kullanilir mi onlarin kendi kodlari olacak mi=?
+
+*/
+
+
+
+
+
+
+#include <tank.h>
+#include <16F877A.h>
+#define _XTAL_FREQ 20000000
+#fuses HS,NOWDT,NOPROTECT,NOLVP 
+#use delay(clock=20M)
+
+#define SOLF PIN_B0
+#define SOLB PIN_B1
+#define SAGF PIN_B2
+#define SAGB PIN_B3
+
+#define MZ80 PIN_B4
+
+#define SERVO_NAMLU PIN_C1
+#define SERVO_KULE PIN_C2
+
+#define ATES PIN_D2
+#define LAZER PIN_D7
+#define SOL_SINYAL PIN_D6
+#define SAG_SINYAL PIN_D5
+#define LABIRENT PIN_D0 // ileride kullanicaz acelesi yok
+#define FENER PIN_D1
+
+#define hc06NINTX PIN_C7  //giris
+#define hc06NINRX PIN_C6 //3.3v verdigimiz-cikis
+
+
+int angle = 0; //default boyle baslasin
+
+
+void setup() {
+   //CCS S PREFIXTEN GELDI DOGRU MUDUR BUNLAR?
+   setup_timer_1(T1_INTERNAL|T1_DIV_BY_1);      //13,1 ms overflow
+   setup_timer_2(T2_DIV_BY_16,255,1);      //819 us overflow, 819 us interrupt
+
+   setup_ccp1(CCP_PWM);
+   setup_ccp2(CCP_PWM);
+   set_pwm1_duty((int16)0);
+   set_pwm2_duty((int16)0);
+      
+   set_tris_b(0b1101000);
+   set_tris_c(0b1000000);
+   set_tris_d(0b0000000); bunlar dogru mu?
+   
+}
+void main()
+{
+
+   setup();
+  
+
+   
+   
+   
+   while(TRUE)
+   {
+   hc06();
+   SUREKLI_ENGEL_KONTROL()
+      
+   }
+
+}
+
+
+void hc06()
+{
+    char veri;
+    if (kbhit())  // Seri porttan veri geldi mi?
+    {
+        veri = getc();  // Gelen veriyi oku
+
+        switch(veri)
+        {
+        
+        //yanlis d pad kule ve namlu için joystcikler palet hareketleri için
+            case 'U': servo_namlu_yukari(); break;
+            case 'D': servo_namlu_asagi(); break;
+            case 'R': servo_kule_sag(); break;
+            case 'L': servo_kule_sol(); break;
+            case '7': SOL_ILERI(); break;  // Sol joystick ileri (örnek)
+            case '1': SOL_GERI(); break;   // Sol joystick geri (örnek)
+            case '9': SAG_ILERI(); break;  // Sag joystick ileri
+            case '3': SAG_GERI(); break;   // Sag joystick geri
+            //case 'I': ISIK(); break;
+            case 'F': ATES_ET(); break;
+            case 'A': LABIRENT_KURTUL(); break;
+            //case 'P': LAZER_TOGGLE(); break;
+            default: DUR(); break;  // Geçersiz veri gelirse tank dursun
+        }
+    }
+}
+
+
+
+/////////////////SERVOLAR-NAMLU-KULE//////////////////
+
+void servo_namlu_yukari() {
+   if (angle < 90) {
+      angle += 1;
+      set_pwm1_duty(aciToDuty(angle));
+      delay_ms(20);  // yavaslat
+   }
+}
+void servo_namlu_asagi() {
+   if (angle > 0) {
+      angle -= 1;
+      set_pwm1_duty(aciToDuty(angle));
+      delay_ms(20);  // yavaslat
+   }
+}
+void servo_kule_sag() {
+   set_pwm2_duty(115);  // donus hizi
+   delay_ms(20);        //duruma gore delay azalt-artir duty oynama salla
+   set_pwm2_duty(94);   // dur
+}
+void servo_kule_sol() {
+   set_pwm2_duty(75);   
+   delay_ms(20);
+   set_pwm2_duty(94);   // dur
+}
+
+int aciToDuty(int aci) {
+   return 62 + ((aci * (125 - 62)) / 180);  // 62–125 duty arasi (1ms–2ms)
+}
+
+
+
+///////////////////DEFAULTTAKI HAREKETLER
+
+void SOL_ILERI() {
+   output_high(SOLF);
+   output_low(SOLB);
+}
+void SOL_GERI() {
+   output_low(SOLF);
+   output_high(SOLB);
+}
+
+void SAG_ILERI() {
+   output_high(SAGF);
+   output_low(SAGB);
+}
+void SAG_GERI() {
+   output_low(SAGF);
+   output_high(SAGB);
+}
+
+void ILERI() {
+   SOL_ILERI();
+   SAG_ILERI();
+}
+void GERI() {
+   SOL_GERI();
+   SAG_GERI();
+}
+void DUR() {
+   output_low(SOLB);
+   output_low(SAGB);
+   output_low(SOLF);
+   output_low(SAGF);
+}
+
+void ENGELDE_DUR() {
+   if(SUREKLI_ENGEL_KONTROL()==1){
+   DUR();
+   delay_ms(1000);
+   GERI();
+   delay_ms(1000);
+   DUR();
+   }
+      // LABIRENT_KURTUL() calisiyorsa bu kapali olmali mantiken????
+   
+}
+
+void ATES_ET() {
+   output_high(ATES);
+   delay_ms(600);
+   output_low(ATES);
+   //f310ten kod ile case F gelicek F geldiginde high olsun sonr aotomatik kapansin toggle veya basili tutma olursa tanki yakma ihtimali var gibi
+}
+
+
+
+
+void LAZER_TOGGLE() {
+   
+   // lazer henüz alinmadi
+}
+void FENER_TOGGLE() {
+   
+   // fener henüz alinmadi
+}
+
+void MUZIK_UYARI_SES() {
+   
+   // dfplayer henüz alinmadi
+}
+
+/////////////
+//LABIRENT KODLARI
+////////////
+void SUREKLI_ENGEL_KONTROL() {
+   if(input(MZ80)==true) return true;
+   else return false;
+}
+
+void LABIRENT_KURTUL() {
+   
+   if(SUREKLI_ENGEL_KONTROL()==true) { // onume engel cikti demek tam onumde
+   
+      LAB_SAG_DON();
+      DUR();
+      delay_ms(1000);
+      if(SUREKLI_ENGEL_KONTROL()==1)//saga donunce engel cikti demek bu 
+      {
+         LAB_180at();//180 derece don az onceki solu kontrol etmis olcan
+         DUR();
+         delay_ms(1000);
+         if(SUREKLI_ENGEL_KONTROL()==1) 
+         {
+         
+            LAB_GERI90(); // 3 yol da kapali cikti simdi burdan sonra yolumu tam tersi sekilde gelip ilk saga dondugum noktaya gelip bu sefer diger yolu denemeliyim 
+            DUR();        // boylelikle muhtemel cikis yollarinin hepsini denemis olcam
+            delay_ms(1000);              
+            
+         }
+         else { ILERI();  }
+      }
+      else {ILERI();}
+   }
+   else ILERI();
+
+}
+
+void LAB_SAG_DON() { //saga doncurcek bizi ama sureyi ayarla mesela 90 derece donmek icin kac sn calismali
+   output_low(SAGF);
+   output_high(SAGB);
+   output_high(SOLF);
+   output_low(SOLB);
+   delay_ms(1000); //yeterli olur mu belli degil deneme yapicaz
+   DUR();
+}
+
+void LAB_180at() { //hem sag hem solda obsticle varsa tam geri dönsün sonra baska fonk ile ilk konuma dondurcem
+   output_low(SOLF);
+   output_high(SOLB);
+   output_high(SAGF);
+   output_low(SAGB);
+   delay_ms(2000); //yeterli olur mu belli degil deneme yapicaz
+   DUR();
+}
+
+void LAB_GERI90() { //hem sag hem solda obsticle varsa tam geri dönsün sonra baska fonk ile ilk konuma dondurcem
+   output_low(SOLF);
+   output_high(SOLB);
+   output_high(SAGF);
+   output_low(SAGB);
+   delay_ms(1000); //yeterli olur mu belli degil deneme yapicaz
+}
+

@@ -1,0 +1,29 @@
+#ifndef _TANK_H_
+#define _TANK_H_
+
+#include <16F877A.h>
+#device ADC=10
+#FUSES NOWDT, NOLVP, XT, PUT
+#use delay(crystal=20000000)
+
+// Kullanilan tanimlar:
+#define hc06       getc()
+#define SUREKLI_ENGEL_KONTROL 1  // varsa bunu 1 yaparsin, yoksa 0
+#define servo_namlu_yukari     // ilgili fonksiyonu tanimla
+#define servo_namlu_asagi
+#define servo_kule_sag
+#define servo_kule_sol
+#define SOL_ILERI
+#define SOL_GERI
+#define SAG_ILERI
+#define SAG_GERI
+#define ATES_ET
+#define LABIRENT_KURTUL
+#define DUR
+
+int aciToDuty(int aci);  // Fonksiyon prototipi
+void LAB_SAG_DON();
+void LAB_180at();
+void LAB_GERI90();
+
+#endif

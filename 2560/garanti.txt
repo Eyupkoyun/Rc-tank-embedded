@@ -1,0 +1,203 @@
+#include <SoftwareSerial.h>
+#include <Servo.h>
+
+// === HC-06 tanımı ===
+//SoftwareSerial hc06(10, 11); // RX, TX
+#define hc06 Serial1
+
+// === Motor pinleri ===
+#define SOLF 22
+#define SOLB 23
+#define SAGF 24
+#define SAGB 25
+
+#define KORNA_PIN 26
+#define MZ80_PIN 27
+#define LAZER_PIN 28
+#define ATES_PIN 29
+
+Servo servoNamlu;
+Servo servoKule;
+
+void setup() {
+  Serial1.begin(9600);
+  Serial.begin(9600);
+
+  // Motor pinleri çıkış olarak ayarlandı
+  pinMode(SOLF, OUTPUT);
+  pinMode(SOLB, OUTPUT);
+  pinMode(SAGF, OUTPUT);
+  pinMode(SAGB, OUTPUT);
+  pinMode(MZ80_PIN, INPUT);
+  pinMode(KORNA_PIN, OUTPUT);
+  pinMode(LAZER_PIN, OUTPUT);
+  pinMode(ATES_PIN, OUTPUT);
+
+  // Motorları durdur başlangıçta
+  DUR();
+  // Servo pinlerini bağla
+  servoNamlu.attach(5);  // 5 numaralı pin 
+  servoKule.attach(6);   // 6 numaralı pin 
+
+  // Başlangıç pozisyonlarını ver
+  servoNamlu.write(90);
+  servoKule.write(90);
+
+  Serial.println("HC-06 tamam.");
+  Serial.println("mz80 kontrol tamam.");
+}
+
+void loop() {
+  // Engel kontrolü sürekli yapılır
+  if (SUREKLI_ENGEL_KONTROL() == LOW) {
+    Serial.println("Engel Algılandı! Engel kurtarma başlatılıyor...");
+    ENGELDE_DUR(); // Engelden kurtulma fonksiyonunu çağır
+  } 
+  else {
+    // HC-06 ile gelen komutları işle
+    if (hc06.available()) {
+      String veri = Serial1.readStringUntil('\n'); // \n'e kadar oku
+      veri.trim(); // varsa boşlukları at
+
+      Serial.print("Gelen veri: ");
+      Serial.println(veri);
+
+      if (veri.length() > 0) { // Boş komut kontrolü
+        char komut = veri.charAt(0); // İlk karakteri al (komut)
+
+        switch (komut) {
+          // Palet hareketleri
+          case '7': SOL_ILERI(); break;
+          case '1': SOL_GERI(); break;
+          case '9': SAG_ILERI(); break;
+          case '3': SAG_GERI(); break;
+
+          // Servo motor kontrolleri
+          case 'U': servo_namlu_yukari(); break;
+          case 'D': servo_namlu_asagi(); break;
+          case 'L': servo_kule_sol(); break;
+          case 'R': servo_kule_sag(); break;
+
+          
+          case 'I': KORNA_SES(); break;
+          case 'K': ATES_ET(); break;
+          case 'J': LAZER_TOGGLE(); break;
+          case 'A': LABIRENT_KURTUL(); break;
+          // Tanımlanmamış verilerde tankı durdur
+          default: DUR(); break;
+        }
+      }
+    }
+  }
+}
+
+void ENGELDE_DUR() {
+  // Engelden kurtulma işlemleri
+  DUR(); // Öncelikle motorları durdur
+  delay(100); // Bir süre bekle
+  GERI(); // Geri hareket et
+  delay(2000); // 3 saniye boyunca geri git
+  DUR(); // Tekrar durdur
+  Serial.println("Engelden kurtulma tamamlandı, manuel kontrol devrede.");
+}
+
+void SOL_ILERI() { 
+
+    digitalWrite(SOLF, HIGH); 
+    digitalWrite(SOLB, LOW); 
+}
+void SOL_GERI() {   
+
+    digitalWrite(SOLF, LOW); 
+    digitalWrite(SOLB, HIGH); 
+}
+void SAG_ILERI() { 
+
+    digitalWrite(SAGF, HIGH); 
+    digitalWrite(SAGB, LOW); 
+}
+void SAG_GERI() { 
+
+    digitalWrite(SAGF, LOW); 
+    digitalWrite(SAGB, HIGH); 
+}
+void DUR() { 
+
+    digitalWrite(SOLF, LOW); 
+    digitalWrite(SOLB, LOW); 
+    digitalWrite(SAGF, LOW); 
+    digitalWrite(SAGB, LOW); 
+}
+void GERI() { 
+    
+    SOL_GERI();
+    SAG_GERI();
+}
+
+void ILERI() { 
+    SOL_ILERI();
+    SAG_ILERI();
+}
+
+
+void servo_kule_sag() {
+  servoKule.write(100);  // Sağa dön (90'dan büyük)
+  delay(30);             // Kısa süre döner
+  servoKule.write(90);   // Durdur
+}
+
+// Kule sola döner
+void servo_kule_sol() {
+  servoKule.write(85);   // Sola dön (90'dan küçük)
+  delay(30);             
+  servoKule.write(90);   
+}
+
+// Namlu yukarı kaldırılır (örnek hız)
+void servo_namlu_yukari() {
+  servoNamlu.write(85);  // Sola dön gibi (namluyu yukarı it)
+  delay(30);
+  servoNamlu.write(90);  // Dur
+}
+
+// Namlu aşağı indirilir
+void servo_namlu_asagi() {
+  servoNamlu.write(100); // Sağa dön gibi (namluyu aşağı it)
+  delay(30);
+  servoNamlu.write(90);  // Dur
+}
+
+
+void KORNA_SES() {
+    digitalWrite(KORNA_PIN, HIGH);
+    delay(600);
+    digitalWrite(KORNA_PIN, LOW);
+    Serial.println("Korna Çalındı!");
+}
+
+void ATES_ET() {
+    digitalWrite(ATES_PIN, HIGH);
+    delay(1000);
+    digitalWrite(ATES_PIN, LOW);
+    Serial.println("Ateşleme Yapıldı!");// iptal hoca tehlikeli dedi-ama lazım ya bu çok iyi
+}
+
+bool lazerAcik = false;
+
+void LAZER_TOGGLE() {
+  lazerAcik = !lazerAcik;
+  digitalWrite(LAZER_PIN, lazerAcik ? HIGH : LOW);
+  if (lazerAcik)
+    Serial.println("Lazer Açıldı!");
+  else
+    Serial.println("Lazer Kapandı!");
+}
+
+int SUREKLI_ENGEL_KONTROL() {
+  return digitalRead(MZ80_PIN); // MZ80 sensöründen engel durumu oku
+}
+
+void LABIRENT_KURTUL() {
+
+}
+

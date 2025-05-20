@@ -1,0 +1,52 @@
+#ifndef TANK_H
+#define TANK_H
+
+/////////// FONKSIYON PROTOTIPLERI ///////////
+
+// Kurulum
+void setup();
+
+// HC-06 veri alimi
+void hc06();
+
+// Servo kontrolleri
+void servo_namlu_yukari();
+void servo_namlu_asagi();
+void servo_kule_sag();
+void servo_kule_sol();
+
+// PWM hesaplama
+int aciToDuty(int aci);
+
+// Palet kontrolleri
+void SOL_ILERI();
+void SOL_GERI();
+void SAG_ILERI();
+void SAG_GERI();
+void ILERI();
+void GERI();
+void DUR();
+void ENGELDE_DUR();
+
+// Lazer, fener, müzik
+void LAZER_TOGGLE();
+void FENER_TOGGLE();
+void MUZIK_UYARI_SES();
+
+// Ates etme
+void ATES_ET();
+
+// Engel kontrol
+int SUREKLI_ENGEL_KONTROL();
+
+// Labirent algoritmalari
+void LABIRENT_KURTUL();
+void LAB_SAG_DON();
+void LAB_180at();
+void LAB_GERI90();
+
+/////////// GLOBAL DEGISKENLER ///////////
+extern int angle; //degisken baska dosyalardan erisilebilir oluyo
+
+#endif
+

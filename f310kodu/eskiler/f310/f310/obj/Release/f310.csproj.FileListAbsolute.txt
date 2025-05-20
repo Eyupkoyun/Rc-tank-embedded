@@ -1,0 +1,17 @@
+C:\Users\eyupk\Desktop\RC tank project\f310kodu\f310\f310\bin\Release\f310.exe.config
+C:\Users\eyupk\Desktop\RC tank project\f310kodu\f310\f310\bin\Release\f310.exe.manifest
+C:\Users\eyupk\Desktop\RC tank project\f310kodu\f310\f310\bin\Release\f310.application
+C:\Users\eyupk\Desktop\RC tank project\f310kodu\f310\f310\bin\Release\f310.exe
+C:\Users\eyupk\Desktop\RC tank project\f310kodu\f310\f310\bin\Release\f310.pdb
+C:\Users\eyupk\Desktop\RC tank project\f310kodu\f310\f310\bin\Release\SharpDX.DirectInput.dll
+C:\Users\eyupk\Desktop\RC tank project\f310kodu\f310\f310\bin\Release\SharpDX.dll
+C:\Users\eyupk\Desktop\RC tank project\f310kodu\f310\f310\bin\Release\SharpDX.pdb
+C:\Users\eyupk\Desktop\RC tank project\f310kodu\f310\f310\bin\Release\SharpDX.DirectInput.pdb
+C:\Users\eyupk\Desktop\RC tank project\f310kodu\f310\f310\bin\Release\SharpDX.DirectInput.xml
+C:\Users\eyupk\Desktop\RC tank project\f310kodu\f310\f310\obj\Release\f310.csproj.AssemblyReference.cache
+C:\Users\eyupk\Desktop\RC tank project\f310kodu\f310\f310\obj\Release\f310.csproj.CoreCompileInputs.cache
+C:\Users\eyupk\Desktop\RC tank project\f310kodu\f310\f310\obj\Release\f310.exe.manifest
+C:\Users\eyupk\Desktop\RC tank project\f310kodu\f310\f310\obj\Release\f310.application
+C:\Users\eyupk\Desktop\RC tank project\f310kodu\f310\f310\obj\Release\f310.csproj.Up2Date
+C:\Users\eyupk\Desktop\RC tank project\f310kodu\f310\f310\obj\Release\f310.exe
+C:\Users\eyupk\Desktop\RC tank project\f310kodu\f310\f310\obj\Release\f310.pdb

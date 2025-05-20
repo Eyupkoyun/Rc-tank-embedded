@@ -1,0 +1,78 @@
+ÀÄtank
+   ÀÄMAIN  0/28  Ram=0
+      ÃÄ@cinit1  (Inline)  Ram=0
+      ÃÄ@cinit2  (Inline)  Ram=0
+      ÃÄsetup  0/48  Ram=0
+      ÃÄhc06  0/211  Ram=1
+      ³  ÃÄservo_namlu_yukari  (Inline)  Ram=1
+      ³  ³  ÃÄaciToDuty  0/68  Ram=2
+      ³  ³  ³  ÃÄ@MUL88  (Inline)  Ram=2
+      ³  ³  ³  ÀÄ@DIV88  (Inline)  Ram=3
+      ³  ³  ÀÄ@delay_ms1  0/20  Ram=1
+      ³  ÃÄservo_namlu_asagi  (Inline)  Ram=1
+      ³  ³  ÃÄaciToDuty  0/68  Ram=2
+      ³  ³  ³  ÀÄ*
+      ³  ³  ÀÄ@delay_ms1  0/20  Ram=1
+      ³  ÃÄservo_kule_sag  (Inline)  Ram=0
+      ³  ³  ÀÄ@delay_ms1  0/20  Ram=1
+      ³  ÃÄservo_kule_sol  (Inline)  Ram=0
+      ³  ³  ÀÄ@delay_ms1  0/20  Ram=1
+      ³  ÃÄSOL_ILERI  0/9  Ram=0
+      ³  ÃÄSOL_GERI  (Inline)  Ram=0
+      ³  ÃÄSAG_ILERI  0/9  Ram=0
+      ³  ÃÄSAG_GERI  (Inline)  Ram=0
+      ³  ÃÄATES_ET  (Inline)  Ram=1
+      ³  ³  ÀÄ@delay_ms1  0/20  Ram=1
+      ³  ÃÄLABIRENT_KURTUL  (Inline)  Ram=1
+      ³  ³  ÃÄLAB_SOL_DON  0/25  Ram=1
+      ³  ³  ³  ÃÄ@delay_ms1  0/20  Ram=1
+      ³  ³  ³  ÀÄDUR  0/17  Ram=0
+      ³  ³  ÃÄDUR  0/17  Ram=0
+      ³  ³  ÃÄ@delay_ms1  0/20  Ram=1
+      ³  ³  ÃÄSUREKLI_ENGEL_KONTROL  0/12  Ram=1
+      ³  ³  ÃÄLAB_180at  0/25  Ram=1
+      ³  ³  ³  ÃÄ@delay_ms1  0/20  Ram=1
+      ³  ³  ³  ÀÄDUR  0/17  Ram=0
+      ³  ³  ÃÄSUREKLI_ENGEL_KONTROL  0/12  Ram=1
+      ³  ³  ÃÄLAB_SAG_DON  0/25  Ram=1
+      ³  ³  ³  ÃÄ@delay_ms1  0/20  Ram=1
+      ³  ³  ³  ÀÄDUR  0/17  Ram=0
+      ³  ³  ÃÄILERI  0/3  Ram=0
+      ³  ³  ³  ÃÄSOL_ILERI  0/9  Ram=0
+      ³  ³  ³  ÀÄSAG_ILERI  0/9  Ram=0
+      ³  ³  ÃÄLAB_180at  0/25  Ram=1
+      ³  ³  ³  ÀÄ*
+      ³  ³  ÃÄSUREKLI_ENGEL_KONTROL  0/12  Ram=1
+      ³  ³  ÃÄLAB_180at  0/25  Ram=1
+      ³  ³  ³  ÀÄ*
+      ³  ³  ÃÄILERI  0/3  Ram=0
+      ³  ³  ³  ÀÄ*
+      ³  ³  ÃÄLAB_180at  0/25  Ram=1
+      ³  ³  ³  ÀÄ*
+      ³  ³  ÃÄILERI  0/3  Ram=0
+      ³  ³  ³  ÀÄ*
+      ³  ³  ÃÄLAB_SAG_DON  0/25  Ram=1
+      ³  ³  ³  ÀÄ*
+      ³  ³  ÃÄSUREKLI_ENGEL_KONTROL  0/12  Ram=1
+      ³  ³  ÃÄLAB_180at  0/25  Ram=1
+      ³  ³  ³  ÀÄ*
+      ³  ³  ÃÄSUREKLI_ENGEL_KONTROL  0/12  Ram=1
+      ³  ³  ÃÄILERI  0/3  Ram=0
+      ³  ³  ³  ÀÄ*
+      ³  ³  ÃÄLAB_SOL_DON  0/25  Ram=1
+      ³  ³  ³  ÀÄ*
+      ³  ³  ÃÄLAB_180at  0/25  Ram=1
+      ³  ³  ³  ÀÄ*
+      ³  ³  ÃÄSUREKLI_ENGEL_KONTROL  0/12  Ram=1
+      ³  ³  ÃÄLAB_180at  0/25  Ram=1
+      ³  ³  ³  ÀÄ*
+      ³  ³  ÃÄILERI  0/3  Ram=0
+      ³  ³  ³  ÀÄ*
+      ³  ³  ÃÄLAB_180at  0/25  Ram=1
+      ³  ³  ³  ÀÄ*
+      ³  ³  ÀÄILERI  0/3  Ram=0
+      ³  ³     ÀÄ*
+      ³  ÃÄKORNA_SES  (Inline)  Ram=1
+      ³  ³  ÀÄ@delay_ms1  0/20  Ram=1
+      ³  ÀÄDUR  0/17  Ram=0
+      ÀÄSUREKLI_ENGEL_KONTROL  0/12  Ram=1

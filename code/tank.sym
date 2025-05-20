@@ -1,0 +1,108 @@
+004-005 @WRITE_PROGRAM_MEMORY8.P1
+004-005 @READ_PROGRAM_MEMORY8.P2
+008     PSP_DATA
+015     CCP_1
+015     CCP_1_LOW
+016     CCP_1_HIGH
+01B     CCP_2_LOW
+01B     CCP_2
+01C     CCP_2_HIGH
+020     angle
+021     sag_dogru_karar
+022     sol_dogru_karar
+023     @TRIS_C
+024     hc06.veri
+025     aciToDuty.aci
+025     servo_namlu_yukari.@SCRATCH1
+025     servo_namlu_asagi.@SCRATCH1
+025     ATES_ET.@SCRATCH1
+025     KORNA_SES.@SCRATCH1
+025     SUREKLI_ENGEL_KONTROL.@SCRATCH1
+025     LABIRENT_KURTUL.@SCRATCH1
+025     LAB_SAG_DON.@SCRATCH1
+025     LAB_180at.@SCRATCH1
+025     LAB_SOL_DON.@SCRATCH1
+026     @MUL88.P1
+026     @delay_ms1.P2
+026     aciToDuty.@SCRATCH1
+027     @MUL88.P1
+027     @DIV88.P2
+028     @DIV88.P1
+029     @DIV88.@SCRATCH1
+077     @SCRATCH
+078     @SCRATCH
+078     _RETURN_
+079     @SCRATCH
+07A     @SCRATCH
+09C.6   C1OUT
+09C.7   C2OUT
+10D-10E @WRITE_PROGRAM_MEMORY8.P1
+10D-10E @READ_PROGRAM_MEMORY8.P2
+
+ROM Allocation:
+000004  setup
+000034  aciToDuty
+000038  @MUL88
+000060  @DIV88
+000078  @delay_ms1
+00008C  SOL_ILERI
+000095  SAG_ILERI
+00009E  DUR
+0000AF  LAB_SOL_DON
+0000C8  SUREKLI_ENGEL_KONTROL
+0000D4  LAB_180at
+0000ED  LAB_SAG_DON
+000106  ILERI
+000109  hc06
+000132  servo_namlu_yukari
+000142  servo_namlu_asagi
+000151  servo_kule_sag
+000159  servo_kule_sol
+000163  SOL_GERI
+00016E  SAG_GERI
+000177  ATES_ET
+000187  LABIRENT_KURTUL
+0001C8  KORNA_SES
+0001DC  MAIN
+0001DC  @cinit1
+0001F1  @cinit2
+
+Project Directory:
+    C:\Users\eyupk\Desktop\RC tank project\code\
+
+Project Files:
+    tank.c                                                  [21-Nis-25 11:53  CRC=6C09D366]
+    ..\..\..\..\..\Program Files (x86)\PICCDEMO\Devices\16F877A.h [18-Ara-24 13:48  CRC=7F12286C]
+    tank.h                                                  [21-Nis-25 11:52  CRC=D0A85137]
+
+Source signature=8C6C9E40
+Program memory checksum=0000
+Hex file CRC=3CB6
+
+Units:
+    C:\Users\eyupk\Desktop\RC tank project\code\tank (main)
+
+Compiler Settings:
+    Processor:      PIC16F877A
+    Pointer Size:   16
+    ADC Range:      0-1023
+    Opt Level:      9
+    Short,Int,Long: UNSIGNED: 1,8,16
+    Float,Double:   32,32
+    ICD Provisions: Yes
+    Compile Mode:   CCS5
+
+Compiler operating in Evaluation Mode
+To obtain a fully enabled compiler visit www.ccsinfo.com/products
+
+Output Files:
+    XREF file:   tank.xsym
+    Errors:      tank.err
+    Ext Symbols: tank.esym
+    INHX8:       tank.hex
+    Symbols:     tank.sym
+    List:        tank.lst
+    Debug/COFF:  tank.cof
+    Project:     tank.ccspjt
+    Call Tree:   tank.tre
+    Statistics:  tank.STA

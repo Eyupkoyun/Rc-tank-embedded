@@ -1,0 +1,357 @@
+/* to do listim
+basic sol palet ve sag palet ileri geri=tamam
+kule sag sol=pwm mantigini ogrenirsem tamam, ayrica kule ve namlu pwm fonklari hangi a?ilarda ?alisacak ben d padde bas?l? tuttukca 1++ derece seklind egi,debilecek mi yoksa 15-30-45 gibi derecelerde mi ccalisacak?? 
+namlu yukari asagi
+laser ac kapa=henuz eklenmedi ama d7 ye takilacak simdilik led takabilirim
+isik ac kapa=simdilik led takicam aldigimda fener takarim,
+ses cal=dfplayer hen?z alinmadi alindiginda uyari sesleri ve istenirse muzik calinabilecek
+kaliteli ivme kontrol=mpcv6050 alincak henuz yapilmadi
+labirent{ //genel olarak ana hatlariyla boyle olucak sadece epproma nasil veri kaydedip otonom geri gelme yapilcak henuz bilmiyorum
+   sag kontrol
+   sol kontrol
+   geri don
+   eski konum=eski konuma mi gelmeli yoksa direkt yeni yola mi girmeli emin degilim
+   islemleri kaydedip tersini yaptirma=
+   mz80 verisini s?rekli ve dogru sekide mi okuyorum=
+}
+yapilan fonklar uygun mu=?
+fonklar parametreli olmali mi=?
+kullandigim mz80 hc06 l298n gibi bilesenler direkt kullanilir mi onlarin kendi kodlari olacak mi=?
+
+*/
+#include <SoftwareSerial.h>
+#include <Servo.h>
+
+// Pin tanımlamaları
+#define HC06_TX 14
+#define HC06_RX 15
+
+#define SERVO_NAMLU_PIN 9
+#define SERVO_KULE_PIN 10
+
+#define SOLF 22
+#define SOLB 23
+#define SAGF 24
+#define SAGB 25
+
+#define KORNA_PIN 26
+#define MZ80_PIN 27
+//#define ATES_PIN 13
+#define LAZER_PIN 28
+//#define SOL_SINYAL_PIN 11
+//#define SAG_SINYAL_PIN 2
+//#define FENER_PIN 8
+
+// Servo nesneleri
+Servo servoNamlu;
+Servo servoKule;
+SoftwareSerial hc06(HC06_TX, HC06_RX); // HC-06 için SoftwareSerial
+
+
+// Global değişkenler
+int angleNamlu = 0; // Namlu başlangıç açısı
+int angleKule = 90; // Kule başlangıç açısı
+bool labirentMod = false; // Labirent modu
+bool lazerMod = false; // Lazer modu
+int sag_dogru_karar = 0;
+int sol_dogru_karar = 0;
+
+void setup() {
+    hc06.begin(9600); // HC-06 için UART haberleşme
+    Serial.begin(9600); // Seri Monitör
+
+    
+    // Servo motorları başlat
+    servoNamlu.attach(SERVO_NAMLU_PIN);
+    servoKule.attach(SERVO_KULE_PIN);
+    pinMode(SOLF, OUTPUT);
+    pinMode(SOLB, OUTPUT);
+    pinMode(SAGF, OUTPUT);
+    pinMode(SAGB, OUTPUT);
+
+    pinMode(KORNA_PIN, OUTPUT);
+    //pinMode(ATES_PIN, OUTPUT);
+    pinMode(LAZER_PIN, OUTPUT);
+    pinMode(MZ80_PIN, INPUT);
+
+    // Namlu ve kuleyi başlangıç pozisyonuna getir
+    servoNamlu.write(angleNamlu);
+    servoKule.write(angleKule);
+
+    Serial.println("Pinler ve sistem ayarlandı!");
+
+}
+
+void loop() {
+    if (Serial.available()) {
+        char veri = Serial.read(); // Gelen veriyi oku
+        Serial.print("Gelen Veri: ");
+        Serial.println(veri);
+
+        switch (veri) {
+            // Palet hareketleri
+            case '7': SOL_ILERI(); break;
+            case '1': SOL_GERI(); break;
+            case '9': SAG_ILERI(); break;
+            case '3': SAG_GERI(); break;
+
+            // Servo motor kontrolleri
+            case 'U': servo_namlu_yukari(); break;
+            case 'D': servo_namlu_asagi(); break;
+            case 'L': servo_kule_sol(); break;
+            case 'R': servo_kule_sag(); break;
+
+            // Korna
+            case 'I': KORNA_SES(); break;
+
+            // Ateşleme
+            //case 'F': ATES_ET(); break;
+
+            // Labirent modu (toggle)
+            case 'A': labirentMod = !labirentMod; 
+                      Serial.println(labirentMod ? "Labirent Modu Açık!" : "Labirent Modu Kapalı!"); 
+                      break;
+
+            // Lazer aç/kapat (toggle)
+            case 'P': lazerMod = !lazerMod; 
+                      digitalWrite(LAZER_PIN, lazerMod ? HIGH : LOW); 
+                      Serial.println(lazerMod ? "Lazer Açık!" : "Lazer Kapalı!"); 
+                      break;
+
+            default: DUR(); break; // Gelen veri tanımlı değilse tankı durdur
+        }
+    }
+
+    if (!labirentMod) {
+        // Labirent modu kapalıysa engel kontrolünü çalıştır
+        if (SUREKLI_ENGEL_KONTROL() == 1) {
+            ENGELDE_DUR();
+        }
+    }
+
+    // **Labirent Çözme Modu**
+    if (labirentMod) {
+        LABIRENT_KURTUL();
+    }
+
+}
+
+// Servo motor kontrolleri
+void servo_namlu_yukari() {
+    if (angleNamlu < 90) { // Maksimum açı sınırı
+        angleNamlu += 1; // Açıyı artır
+        servoNamlu.write(angleNamlu); // Servo motoru hareket ettir
+        delay(20); // Hareket hızını yavaşlat
+        Serial.print("Namlu Yukarı Açısı: ");
+        Serial.println(angleNamlu);
+    }
+}
+
+void servo_namlu_asagi() {
+    if (angleNamlu > 0) { // Minimum açı sınırı
+        angleNamlu -= 1; // Açıyı azalt
+        servoNamlu.write(angleNamlu); // Servo motoru hareket ettir
+        delay(20); // Hareket hızını yavaşlat
+        Serial.print("Namlu Aşağı Açısı: ");
+        Serial.println(angleNamlu);
+    }
+}
+void servo_kule_sag() {
+    if (angleKule < 180) { // Maksimum açı sınırı
+        angleKule += 1; // Açıyı artır
+        servoKule.write(angleKule); // Servo motoru hareket ettir
+        delay(20); // Hareket hızını yavaşlat
+        Serial.print("Kule Sağa Açısı: ");
+        Serial.println(angleKule);
+    }
+}
+void servo_kule_sol() {
+    if (angleKule > 0) { // Minimum açı sınırı
+        angleKule -= 1; // Açıyı azalt
+        servoKule.write(angleKule); // Servo motoru hareket ettir
+        delay(20); // Hareket hızını yavaşlat
+        Serial.print("Kule Sola Açısı: ");
+        Serial.println(angleKule);
+    }
+}
+
+
+// Palet kontrolleri
+void SOL_ILERI() { 
+
+    digitalWrite(SOLF, HIGH); 
+    digitalWrite(SOLB, LOW); 
+    Serial.println("Sol Palet İleri!"); 
+}
+void SOL_GERI() {   
+
+    digitalWrite(SOLF, LOW); 
+    digitalWrite(SOLB, HIGH); 
+    Serial.println("Sol Palet Geri!"); 
+}
+void SAG_ILERI() { 
+
+    digitalWrite(SAGF, HIGH); 
+    digitalWrite(SAGB, LOW); 
+    Serial.println("Sağ Palet İleri!"); 
+}
+void SAG_GERI() { 
+
+    digitalWrite(SAGF, LOW); 
+    digitalWrite(SAGB, HIGH); 
+    Serial.println("Sağ Palet Geri!"); 
+}
+void DUR() { 
+
+    digitalWrite(SOLF, LOW); 
+    digitalWrite(SOLB, LOW); 
+    digitalWrite(SAGF, LOW); 
+    digitalWrite(SAGB, LOW); 
+    Serial.println("Tank Durdu!"); 
+}
+void GERI() { 
+    
+    SOL_GERI();
+    SAG_GERI();
+}
+
+void ILERI() { 
+    SOL_ILERI();
+    SAG_ILERI();
+}
+
+
+void ENGELDE_DUR() { // LABIRENT_KURTUL() calisiyorsa bu kapali olmali mantiken????
+    if(SUREKLI_ENGEL_KONTROL()==1)
+    DUR();
+    delay(1000);
+    GERI();
+    delay(1000);
+    DUR();
+}
+
+
+// Korna
+void KORNA_SES() {
+    digitalWrite(KORNA_PIN, HIGH);
+    delay(1000);
+    digitalWrite(KORNA_PIN, LOW);
+    Serial.println("Korna Çalındı!");
+}
+
+// Ateşleme
+void ATES_ET() {
+    //digitalWrite(ATES_PIN, HIGH);delay(600);digitalWrite(ATES_PIN, LOW);Serial.println("Ateşleme Yapıldı!");
+    //iptal, hoca tehlikeli dedi ama dursun burda
+}
+
+
+void LAZER_TOGGLE() {
+   
+    digitalWrite(LAZER_PIN, HIGH);
+    delay(1000);
+    digitalWrite(LAZER_PIN, LOW);
+    Serial.println("lazer yandı!");
+
+}
+void FENER_TOGGLE() {
+
+  //henuz almaadim
+}
+
+void MUZIK_UYARI_SES() {
+   
+   // dfplayer henuz alinmadi
+}
+
+
+
+
+// Labirent kontrol fonksiyonları
+int SUREKLI_ENGEL_KONTROL() {
+    return digitalRead(MZ80_PIN); // MZ80 engel algılama
+}
+
+void LABIRENT_KURTUL() {
+    if (sol_dogru_karar > sag_dogru_karar) {  // tam karsida duvar var onceden hep sol yapmissin o zaman simdi once sag kontrol et
+        LAB_SOL_DON();
+        DUR();
+        delay(1000);
+
+        if (SUREKLI_ENGEL_KONTROL()) {// sola donunce engel cikti
+            LAB_180at();
+            if (SUREKLI_ENGEL_KONTROL()) { //sagda da engel varsa geri dön terste bekle
+                LAB_SAG_DON();//artik kafa geriye bakiyor. burdan sonrasi hazifaza tutup otonom geri gelme
+            } else {
+                //sagda engel yokmus demek. burasi tamam artik engel yok L labirentmis, çsagdan gidicez sagL labirentmis
+                ILERI();
+                sag_dogru_karar++;
+            }
+        } else { //solda engel yokmus buradan gidicez ama yine de sagda engel var mi ogrenip hafizada burayi"karar noktasi" olarak tutucaz
+            sol_dogru_karar++;
+            LAB_180at();
+            if (!SUREKLI_ENGEL_KONTROL()) {//yani sirf burada bosluk var mi? geri dönmem gerekir mi diye kontrol ettigim bi yer burayi nasil tutucam bilmiyorum
+                //hafizaya ekle burasi bosluk, buradan cikis yapilacak ama once solu deniycez
+                sag_dogru_karar++;
+                LAB_180at();
+                ILERI(); //sola donduk gidiyoz
+            } else { //engel varmis burayi yokmus gibi davranicaz 180 atip soldan devam edicez
+                LAB_180at();
+                ILERI();
+            }
+        }
+    } else { //yani sag karar=>sol kararmis
+        LAB_SAG_DON();
+        if (SUREKLI_ENGEL_KONTROL()) { //sagda engel varmis, solu kontrol et eger bossa git sol L labirent, solda engel varsa geri dön 
+            LAB_180at();
+            if (!SUREKLI_ENGEL_KONTROL()) { //180 atip solda engel gormeyince o yoldan devam et
+                sol_dogru_karar++;
+                ILERI();
+            } else { //sol da dolu engel var, geri don çik gir buralardan
+                LAB_SOL_DON();
+            }
+        } else { //sagda engel yokmus saga gidicez ama sol kontrol et
+            sag_dogru_karar++;
+            LAB_180at();
+            if (SUREKLI_ENGEL_KONTROL()) {
+                //solda engel varmis sadece saga gidis varmis saga donuk L labirent
+                LAB_180at(); //tekrar saga donduk gidicez
+                ILERI();
+            } else {
+                //BURADAKI  YORUM SATIRLARI ONEMLI  MANTIK BUNUN UZERINE KURULU
+            //solda da engel yokmus burayi karar noktasi belirliyoruz 
+            //ona gore ileride takilirsak buraya donup burdan sola gitme karari verip labirentten cikma sansini deniycez
+                sol_dogru_karar++;
+                LAB_180at();//saga donduk gidicez bakalim ileride ne engeller cikicak dogru yol bu muymus acaba?
+                ILERI();
+            }
+        }
+    }
+}
+
+void LAB_SAG_DON() {  //saga doncurcek bizi ama sureyi ayarla mesela 90 derece donmek icin kac sn calismali
+    digitalWrite(SAGF, LOW);
+    digitalWrite(SAGB, HIGH);
+    digitalWrite(SOLF, HIGH);
+    digitalWrite(SOLB, LOW);
+    delay(1000); //yeterli olur mu belli degil deneme yapicaz
+    DUR();
+}
+
+void LAB_180at() { //hem sag hem solda obsticle varsa tam geri donsun sonra baska fonk ile ilk konuma dondurcem
+    digitalWrite(SOLF, LOW);
+    digitalWrite(SOLB, HIGH);
+    digitalWrite(SAGF, HIGH);
+    digitalWrite(SAGB, LOW);
+    delay(2000); //yeterli olur mu belli degil deneme yapicaz
+    DUR();
+}
+
+void LAB_SOL_DON() { //hem sag hem solda obsticle varsa tam geri donsun sonra baska fonk ile ilk konuma dondurcem
+    digitalWrite(SOLF, HIGH);
+    digitalWrite(SOLB, LOW);
+    digitalWrite(SAGF, LOW);
+    digitalWrite(SAGB, HIGH);
+    delay(1000); //yeterli olur mu belli degil deneme yapicaz
+    DUR();
+}

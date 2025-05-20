@@ -1,0 +1,26 @@
+C:\Users\eyupk\Desktop\denemeü\hzl denem.exe
+C:\Users\eyupk\Desktop\denemeü\hzl denem.dll
+C:\Users\eyupk\Desktop\denemeü\hzl denem.deps.json
+C:\Users\eyupk\Desktop\denemeü\hzl denem.runtimeconfig.json
+C:\Users\eyupk\Desktop\denemeü\hzl denem.pdb
+C:\Users\eyupk\Desktop\denemeü\SharpDX.dll
+C:\Users\eyupk\Desktop\denemeü\SharpDX.DirectInput.dll
+C:\Users\eyupk\Desktop\denemeü\System.IO.Ports.dll
+C:\Users\eyupk\Desktop\denemeü\runtimes\android-arm\native\libSystem.IO.Ports.Native.so
+C:\Users\eyupk\Desktop\denemeü\runtimes\android-arm64\native\libSystem.IO.Ports.Native.so
+C:\Users\eyupk\Desktop\denemeü\runtimes\android-x64\native\libSystem.IO.Ports.Native.so
+C:\Users\eyupk\Desktop\denemeü\runtimes\android-x86\native\libSystem.IO.Ports.Native.so
+C:\Users\eyupk\Desktop\denemeü\runtimes\linux-arm\native\libSystem.IO.Ports.Native.so
+C:\Users\eyupk\Desktop\denemeü\runtimes\linux-arm64\native\libSystem.IO.Ports.Native.so
+C:\Users\eyupk\Desktop\denemeü\runtimes\linux-bionic-arm64\native\libSystem.IO.Ports.Native.so
+C:\Users\eyupk\Desktop\denemeü\runtimes\linux-bionic-x64\native\libSystem.IO.Ports.Native.so
+C:\Users\eyupk\Desktop\denemeü\runtimes\linux-musl-arm\native\libSystem.IO.Ports.Native.so
+C:\Users\eyupk\Desktop\denemeü\runtimes\linux-musl-arm64\native\libSystem.IO.Ports.Native.so
+C:\Users\eyupk\Desktop\denemeü\runtimes\linux-musl-x64\native\libSystem.IO.Ports.Native.so
+C:\Users\eyupk\Desktop\denemeü\runtimes\linux-x64\native\libSystem.IO.Ports.Native.so
+C:\Users\eyupk\Desktop\denemeü\runtimes\maccatalyst-arm64\native\libSystem.IO.Ports.Native.dylib
+C:\Users\eyupk\Desktop\denemeü\runtimes\maccatalyst-x64\native\libSystem.IO.Ports.Native.dylib
+C:\Users\eyupk\Desktop\denemeü\runtimes\osx-arm64\native\libSystem.IO.Ports.Native.dylib
+C:\Users\eyupk\Desktop\denemeü\runtimes\osx-x64\native\libSystem.IO.Ports.Native.dylib
+C:\Users\eyupk\Desktop\denemeü\runtimes\unix\lib\net8.0\System.IO.Ports.dll
+C:\Users\eyupk\Desktop\denemeü\runtimes\win\lib\net8.0\System.IO.Ports.dll

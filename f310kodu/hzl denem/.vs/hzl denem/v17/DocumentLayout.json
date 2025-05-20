@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\eyupk\\Desktop\\RC tank project\\f310kodu\\hzl denem\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{40ABEF0A-83D3-43DC-874A-B48A67A137A1}|hzl denem\\hzl denem.csproj|c:\\users\\eyupk\\desktop\\rc tank project\\f310kodu\\hzl denem\\hzl denem\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{40ABEF0A-83D3-43DC-874A-B48A67A137A1}|hzl denem\\hzl denem.csproj|solutionrelative:hzl denem\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\eyupk\\Desktop\\RC tank project\\f310kodu\\hzl denem\\hzl denem\\Program.cs",
+              "RelativeDocumentMoniker": "hzl denem\\Program.cs",
+              "ToolTip": "C:\\Users\\eyupk\\Desktop\\RC tank project\\f310kodu\\hzl denem\\hzl denem\\Program.cs",
+              "RelativeToolTip": "hzl denem\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-14T11:24:44.865Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

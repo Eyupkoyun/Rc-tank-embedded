@@ -1,0 +1,2 @@
+C:\Users\eyupk\Desktop\RC tank project\f310kodu\hzl denem\hzl denem\bin\Release\net8.0\win-x64\publish\hzl denem.pdb
+C:\Users\eyupk\Desktop\RC tank project\f310kodu\hzl denem\hzl denem\bin\Release\net8.0\win-x64\publish\hzl denem.exe

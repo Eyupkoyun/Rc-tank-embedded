@@ -1,0 +1,2 @@
+C:\Users\eyupk\Desktop\RC tank project\f310kodu\f310son\f310son\bin\Release\net8.0\win-x64\publish\f310son.pdb
+C:\Users\eyupk\Desktop\RC tank project\f310kodu\f310son\f310son\bin\Release\net8.0\win-x64\publish\f310son.exe
