@@ -57,3 +57,4 @@ Kodlar `tank.ino` içinde toplanmıştır. Proje ilerledikçe modüler yapıya a
 ## Görseller
 
 *Görseller ileride eklenecektir.*
+<iframe width="560" height="315" src="https://www.youtube.com/embed/zAA5v1FqhQM?si=lt05HG9gxPd1sylk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
