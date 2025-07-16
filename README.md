@@ -11,7 +11,7 @@ Bu proje, gömülü sistemler bilgisiyle geliştirilmiş uzaktan kumandalı bir 
 - **IRFZ44 MOSFET motor sürücü**
 - **Motorlar ve palet sistemi**
 - **LED'ler** (farlar, sinyaller, selektör)
-- **Korna**
+- **Buzzer**
 - **Lazer**
 - **Joystick & Logitech F310 gamepad**
 
@@ -25,7 +25,7 @@ Bluetooth üzerinden joystick (Logitech F310) ile aşağıdaki komutlar gönderi
 | 9 / 3 | Sağ palet ileri / geri |
 | U / D | Namlu yukarı / aşağı |
 | L / R | Kule sola / sağa |
-| I     | Korna |
+| I     | Buzzer |
 | K     | Ateş et (simülasyon) |
 | J     | Lazer aç/kapat |
 | A     | Sol sinyal |
@@ -52,7 +52,7 @@ Kodlar `tank.ino` içinde toplanmıştır. Proje ilerledikçe modüler yapıya a
 - [x] Engel algılayıp kaçma
 - [x] Far, selektör ve sinyal sistemleri
 - [ ] EEPROM’a yol kaydetme (gelecek planı)
-- [ ] Tamamen otonom görev (yarışmanın 3. aşaması)
+- [ ] Otonom şekilde labirent çözme
 
 ## Görseller
 
